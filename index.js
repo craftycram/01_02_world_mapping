@@ -23,8 +23,8 @@
  */
 
 const rl = require('readline')
-const jimp = require('jimp')
 const chalk = require('chalk');
+// const jimp = require('jimp')
 
 clearConsole()
 
@@ -50,7 +50,12 @@ jimp.read('prag.jpg', (err, map_image) => {
 setInterval(function () {
 
   clearConsole()
-  generateInvader(6, 4);
+  const xpos = Math.floor(Math.random() * 150);
+  const ypos = Math.floor(Math.random() * 70);
+  generateInvader(6, 4, xpos, ypos);
+  //generateInvader(6, 14, xpos, ypos);
+  rl.cursorTo(process.stdout, 0, 0);
+  console.log(xpos, ypos);
 
 }, 1000);
 
@@ -70,7 +75,7 @@ function writeCharacterToConsole (char, x, y) {
   process.stdout.write(char)
 }
 
-function generateInvader (width, height) {
+function generateInvader (width, height, xpos, ypos) {
 
   let invader = [];
   //const printChar = '#';
@@ -82,19 +87,24 @@ function generateInvader (width, height) {
     for (let y = 0; y < height; y++) {
 
       const rand = Math.random();
-      const color_r = Math.random() * 255; 
-      const color_g = Math.random() * 255; 
-      const color_b = Math.random() * 255; 
+      const color_r = Math.random() * 255;
+      const color_g = Math.random() * 255;
+      const color_b = Math.random() * 255;
+
+      const hue = Math.random() * 360;
 
       if (rand > 0.5) {
 
-        const colorChar = chalk.rgb(color_r, color_g, color_b)(printChar);
+        const colorCharRGB = chalk.rgb(color_r, color_g, color_b)(printChar);
+        const colorCharHSV = chalk.hsv(hue, 100, 100)(printChar);
+        /*
         rl.cursorTo(process.stdout, 0, height + 1);
         console.log(color_r, color_g, color_b);
-        
-        
-        writeCharacterToConsole((colorChar), x, y);
-        writeCharacterToConsole((colorChar), width * 2 - x, y);
+        */
+
+
+        writeCharacterToConsole((colorCharHSV), x + xpos, y + ypos);
+        writeCharacterToConsole((colorCharHSV), width * 2 - x + xpos, y + ypos);
 
         if (!Array.isArray(invader[x])) {
           invader[x] = [];
@@ -103,10 +113,10 @@ function generateInvader (width, height) {
           invader[x][y] = 1;
         }
 
-        
+
       } else {
 
-        
+
         if (!Array.isArray(invader[x])) {
           invader[x] = [];
           invader[x][y] = 0;
@@ -121,9 +131,11 @@ function generateInvader (width, height) {
     }
 
   }
-  
+
+  /*
   rl.cursorTo(process.stdout, 0, height + 2);
   console.log(invader);
-  
+  */
+
 
 }
