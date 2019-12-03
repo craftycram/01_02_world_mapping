@@ -47,7 +47,7 @@ jimp.read('prag.jpg', (err, map_image) => {
 
 
 let i = 0;
-const invader = generateInvader(6, 14, i, 5);
+const invader = generateInvader(6, 4, i, 5);
 
 //Vorerst nur ein Platzhalter
 setInterval(function () {
