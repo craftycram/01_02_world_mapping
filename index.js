@@ -28,6 +28,7 @@ const chalk = require('chalk');
 
 clearConsole()
 
+/*
 jimp.read('prag.jpg', (err, map_image) => {
   if (err) throw err;
 
@@ -42,9 +43,14 @@ jimp.read('prag.jpg', (err, map_image) => {
     }
   }
 });
+*/
+
 
 //Vorerst nur ein Platzhalter
 setInterval(function () {
+
+  clearConsole()
+  generateInvader(6, 4);
 
 }, 1000);
 
@@ -62,4 +68,62 @@ function clearConsole () {
 function writeCharacterToConsole (char, x, y) {
   rl.cursorTo(process.stdout, x, y)
   process.stdout.write(char)
+}
+
+function generateInvader (width, height) {
+
+  let invader = [];
+  //const printChar = '#';
+  const printChar = '■';
+  //const printChar = '👾';
+
+  for (let x = 0; x < width; x++) {
+
+    for (let y = 0; y < height; y++) {
+
+      const rand = Math.random();
+      const color_r = Math.random() * 255; 
+      const color_g = Math.random() * 255; 
+      const color_b = Math.random() * 255; 
+
+      if (rand > 0.5) {
+
+        const colorChar = chalk.rgb(color_r, color_g, color_b)(printChar);
+        rl.cursorTo(process.stdout, 0, height + 1);
+        console.log(color_r, color_g, color_b);
+        
+        
+        writeCharacterToConsole((colorChar), x, y);
+        writeCharacterToConsole((colorChar), width * 2 - x, y);
+
+        if (!Array.isArray(invader[x])) {
+          invader[x] = [];
+          invader[x][y] = 1;
+        } else {
+          invader[x][y] = 1;
+        }
+
+        
+      } else {
+
+        
+        if (!Array.isArray(invader[x])) {
+          invader[x] = [];
+          invader[x][y] = 0;
+
+        } else {
+          invader[x][y] = 0;
+
+        }
+
+      }
+
+    }
+
+  }
+  
+  rl.cursorTo(process.stdout, 0, height + 2);
+  console.log(invader);
+  
+
 }
